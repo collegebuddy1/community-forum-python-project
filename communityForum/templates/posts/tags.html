@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} {{tag}} {% endblock %}
+
+
+{% block body %} 
+
+<div class="col-md-8 m-auto">
+
+    <div class="my-4 bg-light py-5 text-center border rounded">
+        <h3 class="text-capitalize">{{tag}}</h3>
+        <p>All questions and answers from {{tag}}.</p>
+    </div>
+
+    <p>Popular Topics: &nbsp;
+        {% for tag in common_tags %}
+        <a href="/tags/{{tag.slug}}" class="text-decoration-none"><small class="p-1 bg-light text-secondary border rounded mr-2">{{tag}}</small></a>
+        {% endfor %}
+    </p>
+
+
+    <div>
+        <h4 class="ms-3">{{object.title}} Questions</h4>
+
+        {% for q in posts %}
+        <div class="border-top p-3">
+            <h4><a class="text-decoration-none" href="{% url 'post-detail' q.id %}">{{q.title}}</a></h4>
+            <small class="text-muted">Posted by <a href="{% url 'profile' q.author %}">{{q.author}}</a> on {{q.timestamp |date:"M d, Y" }}</small>
+            <p>{{q.body}}</p>
+            
+            {% for tag in q.tags.all %}
+            <a href="/tags/{{tag.slug}}" class="text-decoration-none"><small class="p-1 bg-light text-secondary border rounded mr-2">{{tag}}</small></a>
+            {% endfor %}
+        </div>
+        {% empty %}
+        <div class="text-center bg-light py-4 border rounded mt-3">
+            <p>No questions in this topic, be the first to <a href="{% url 'post-create' %}">add</a>.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+</div>
+
+{% endblock %}
